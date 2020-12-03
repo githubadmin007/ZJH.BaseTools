@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4D3981DD-CA1F-44D9-AF39-597603B3623E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZJH.BaseTools</RootNamespace>
+    <AssemblyName>ZJH.BaseTools</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;FW4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;FW4_0</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Binaries\DB\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Binaries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Binaries\DB\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\ZJH.BaseTools.Core\BasicExtend\DateTimeExtend.cs">
+      <Link>BasicExtend\DateTimeExtend.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\BasicExtend\ListExtend.cs">
+      <Link>BasicExtend\ListExtend.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\BasicExtend\ObjectExtend.cs">
+      <Link>BasicExtend\ObjectExtend.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\BasicExtend\StringExtend.cs">
+      <Link>BasicExtend\StringExtend.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\Convert.cs">
+      <Link>DB\Convert.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\DatabaseHelper.cs">
+      <Link>DB\DatabaseHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\Extend\DataTableEx.cs">
+      <Link>DB\Extend\DataTableEx.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\Extend\IDataReaderEx.cs">
+      <Link>DB\Extend\IDataReaderEx.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\MySQLDatabaseHelper.cs">
+      <Link>DB\MySQLDatabaseHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\OracleDatabaseHelper.cs">
+      <Link>DB\OracleDatabaseHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\SQLiteDatabaseHelper.cs">
+      <Link>DB\SQLiteDatabaseHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\SQLServerDatabaseHelper.cs">
+      <Link>DB\SQLServerDatabaseHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\GlobalConfig.cs">
+      <Link>GlobalConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\IO\FileHelper.cs">
+      <Link>IO\FileHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\IO\Logger.cs">
+      <Link>IO\Logger.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\IO\PathHelper.cs">
+      <Link>IO\PathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\IO\XmlReader.cs">
+      <Link>IO\XmlReader.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\Net\ZWebClient.cs">
+      <Link>Net\ZWebClient.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\Text\JSON.cs">
+      <Link>Text\JSON.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\Text\Result.cs">
+      <Link>Text\Result.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\InputBox.Designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UI\说明.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UI\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\ZJH.BaseTools.Core\ZJH.BaseTools.config">
+      <Link>ZJH.BaseTools.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
