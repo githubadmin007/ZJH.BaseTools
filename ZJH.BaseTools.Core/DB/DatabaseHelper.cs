@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Windows.Markup;
 using System.Xml;
 using ZJH.BaseTools.BasicExtend;
 using ZJH.BaseTools.DB.Extend;
@@ -101,7 +102,7 @@ namespace ZJH.BaseTools.DB
         /// <param name="commandText">Select SQL语句</param>
         /// <param name="connection"></param>
         /// <returns></returns>
-        protected abstract DbDataAdapter CreateDataAdapter(string commandText, DbConnection connection);
+        protected abstract DbDataAdapter CreateDataAdapter(string commandText);
         /// <summary>
         /// 使用DataAdapter对数据库进行插入/删除/更新时，会要求提供InsertCommand/DeleteCommand/UpdateCommand，此方法用于自动创建Command
         /// 注：只适用于单个表的插入/删除/更新
@@ -143,8 +144,8 @@ namespace ZJH.BaseTools.DB
         /// <param name="commandText"></param>
         /// <param name="DbParams"></param>
         /// <returns></returns>
-        protected DbDataAdapter CreateDataAdapter(DbConnection connection, string commandText, params DbParam[] DbParams) {
-            DbDataAdapter adapter = CreateDataAdapter(commandText, connection);
+        protected DbDataAdapter CreateDataAdapter(string commandText, params DbParam[] DbParams) {
+            DbDataAdapter adapter = CreateDataAdapter(commandText);
             if (adapter != null && adapter.SelectCommand != null) {
                 var values = CreateParameters(DbParams).ToArray();
                 adapter.SelectCommand.Parameters.AddRange(values);
@@ -398,7 +399,7 @@ namespace ZJH.BaseTools.DB
             try
             {
                 OpenConnection();
-                using (DbDataAdapter adapter = CreateDataAdapter(conn, sql, DbParams)) {
+                using (DbDataAdapter adapter = CreateDataAdapter(sql, DbParams)) {
                     table = new DataTable();
                     adapter.Fill(table);
                 }
@@ -429,7 +430,7 @@ namespace ZJH.BaseTools.DB
                 }
                 OpenConnection();
                 // TODO:insertTableName未做防SQL注入
-                using (DbDataAdapter adapter = CreateDataAdapter($"select * from {insertTableName} where 1=0", conn)) // 只获取表结构
+                using (DbDataAdapter adapter = CreateDataAdapter($"select * from {insertTableName} where 1=0")) // 只获取表结构
                 using (CreateCommandBuilder(adapter))
                 {
                     DataTable dbTable = new DataTable();
@@ -489,7 +490,7 @@ namespace ZJH.BaseTools.DB
                 cmd.Transaction = tran = conn.BeginTransaction();
                 foreach (DataTable table in insertTables)
                 {
-                    using (DbDataAdapter adapter = CreateDataAdapter($"select * from {table.TableName} where 1=0", conn)) // 只获取表结构
+                    using (DbDataAdapter adapter = CreateDataAdapter($"select * from {table.TableName} where 1=0")) // 只获取表结构
                     using (DbCommandBuilder builder = CreateCommandBuilder(adapter))
                     {
                         adapter.SelectCommand.Transaction = tran;
@@ -558,20 +559,45 @@ namespace ZJH.BaseTools.DB
             return false;
         }
 
-        public bool UpdateDataRow(DataRow row, string updateTableName) {
+        /// <summary>
+        /// 将DataRow更新到数据库
+        /// </summary>
+        /// <param name="row">要更新的数据</param>
+        /// <param name="sql">查找要被更新的记录，只允许一条，多或少都将失败</param>
+        /// <param name="DbParams">sql语句的参数化查询参数</param>
+        /// <returns></returns>
+        public bool UpdateDataRow(DataRow row, string sql, params DbParam[] DbParams) {
             try
             {
-                //if (row == null)
-                //{
-                //    return false;
-                //}
-                //// 移除其他行
-                //row.Table.RemoveRows(_row => _row != row);
-                //return InsertDataTable(row.Table, insertTableName);
+                OpenConnection();
+                // TODO:insertTableName未做防SQL注入
+                using (DbDataAdapter adapter = CreateDataAdapter(sql, DbParams)) // 只获取表结构
+                using (CreateCommandBuilder(adapter))
+                {
+                    DataTable dbTable = new DataTable();
+                    adapter.Fill(dbTable);
+                    if (dbTable.Rows.Count == 0)
+                    {
+                        throw new Exception("找不到要更新的记录");
+                    }
+                    else if (dbTable.Rows.Count > 1)
+                    {
+                        throw new Exception("存在两条或以上的记录");
+                    }
+                    else {
+                        dbTable.Rows[0].SetData(row);
+                    }
+                    adapter.Update(dbTable);
+                }
+                return true;
             }
             catch (Exception ex)
             {
-                Logger.log("InsertDataRow", ex.Message);
+                Logger.log("UpdateDataRow", ex.Message);
+            }
+            finally
+            {
+                CloseConnection();
             }
             return false;
         }
@@ -631,6 +657,9 @@ namespace ZJH.BaseTools.DB
         }
     }
 
+    /// <summary>
+    /// 参数化查询的参数
+    /// </summary>
     public class DbParam
     {
         public string Key { get; }
@@ -638,6 +667,24 @@ namespace ZJH.BaseTools.DB
         public DbParam(string key, object value) {
             Key = key;
             Value = value;
+        }
+
+        /// <summary>
+        /// 获取where in语句的参数化查询参数
+        /// </summary>
+        /// <param name="whereSQL">in子句</param>
+        /// <param name="field">要查询的字段名【注意，这个参数要防SQL注入】</param>
+        /// <param name="values">要查询的数据列表</param>
+        /// <returns>参数化查询参数</returns>
+        public static IEnumerable<DbParam> GetDbParams_WhereIn(out string whereSQL, string field, params object[] values) {
+            List<DbParam> DbParams = new List<DbParam>();
+            var fields = values.Select((value, index) => {
+                string key = $"@{field}{index}";
+                DbParams.Add(new DbParam(key, value));
+                return key;
+            });
+            whereSQL = $"{field} in ({fields.Join(",")})";
+            return DbParams;
         }
     }
 }

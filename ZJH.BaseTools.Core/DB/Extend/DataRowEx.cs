@@ -31,7 +31,32 @@ namespace ZJH.BaseTools.DB.Extend
                 return true;
             }
             catch(Exception ex) {
-                Logger.log("DataRowEx.SetData", ex);
+                Logger.log("DataRowEx.SetData(this DataRow Row, string DataJSON)", ex);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 使用另一个DataRow进行赋值
+        /// </summary>
+        /// <param name="Row"></param>
+        /// <param name="DataRow"></param>
+        /// <returns></returns>
+        public static bool SetData(this DataRow Row, DataRow otherRow) {
+            try
+            {
+                foreach (DataColumn column in Row.Table.Columns)
+                {
+                    if (otherRow.Table.Columns.Contains(column.ColumnName))
+                    {
+                        Row[column.ColumnName] = otherRow[column.ColumnName];
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.log("DataRowEx.SetData(this DataRow Row, DataRow otherRow)", ex);
             }
             return false;
         }

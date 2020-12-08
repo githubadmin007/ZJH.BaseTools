@@ -28,9 +28,9 @@ namespace ZJH.BaseTools.DB
             cmd.Connection = conn;
             return cmd;
         }
-        protected override DbDataAdapter CreateDataAdapter(string commandText, DbConnection connection)
+        protected override DbDataAdapter CreateDataAdapter(string commandText)
         {
-            DbDataAdapter adapter = new OracleDataAdapter(commandText, (OracleConnection)connection);
+            DbDataAdapter adapter = new OracleDataAdapter(commandText, (OracleConnection)conn);
             return adapter;
         }
         protected override DbCommandBuilder CreateCommandBuilder(DbDataAdapter adapter)

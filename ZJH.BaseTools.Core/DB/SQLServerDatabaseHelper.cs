@@ -24,9 +24,9 @@ namespace ZJH.BaseTools.DB
             return cmd;
         }
 
-        protected override DbDataAdapter CreateDataAdapter(string commandText, DbConnection connection)
+        protected override DbDataAdapter CreateDataAdapter(string commandText)
         {
-            DbDataAdapter adapter = new SqlDataAdapter(commandText, (SqlConnection)connection);
+            DbDataAdapter adapter = new SqlDataAdapter(commandText, (SqlConnection)conn);
             return adapter;
         }
         protected override DbCommandBuilder CreateCommandBuilder(DbDataAdapter adapter)

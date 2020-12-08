@@ -22,9 +22,9 @@ namespace ZJH.BaseTools.DB
             return cmd;
         }
 
-        protected override DbDataAdapter CreateDataAdapter(string commandText, DbConnection connection)
+        protected override DbDataAdapter CreateDataAdapter(string commandText)
         {
-            DbDataAdapter adapter = new MySqlDataAdapter(commandText, (MySqlConnection)connection);
+            DbDataAdapter adapter = new MySqlDataAdapter(commandText, (MySqlConnection)conn);
             return adapter;
         }
         protected override DbCommandBuilder CreateCommandBuilder(DbDataAdapter adapter) {
