@@ -1,10 +1,8 @@
-﻿using MySqlX.XDevAPI.Relational;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Windows.Markup;
 using System.Xml;
 using ZJH.BaseTools.BasicExtend;
 using ZJH.BaseTools.DB.Extend;

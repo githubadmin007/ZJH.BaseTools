@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using ZJH.BaseTools.BasicExtend;
 
@@ -17,7 +16,7 @@ namespace ZJH.BaseTools.DB.Extend
         /// <param name="valueObj"></param>
         /// <returns></returns>
         public static object Convert(this DataColumn column, JToken valueObj) {
-            if (valueObj == null || valueObj.ToString() == "") return null;
+            if (valueObj == null) return null; //  || valueObj.ToString() == ""
             switch (column.DataType.FullName)
             {
                 case "System.DateTime":

@@ -8,10 +8,10 @@ namespace ZJH.BaseTools.Net
 {
     public class ZWebClient
     {
-        static WebClient client = new WebClient();
         static public Encoding DefaultEncoding = Encoding.UTF8;
         static public string DownloadString(string url, Encoding encoding = null) {
             encoding = encoding ?? DefaultEncoding;
+            WebClient client = new WebClient();
             byte[] b = client.DownloadData(url);
             return encoding.GetString(b);
         }

@@ -22,9 +22,9 @@ namespace ZJH.BaseTools.DB.Extend
                 JObject data = JObject.Parse(DataJSON);
                 foreach (DataColumn column in Row.Table.Columns)
                 {
-                    if (data.ContainsKey(column.ColumnName))
+                    JToken token;
+                    if (data.TryGetValue(column.ColumnName, out token))
                     {
-                        JToken token = data.GetValue(column.ColumnName);
                         Row[column.ColumnName] = column.Convert(token);
                     }
                 }

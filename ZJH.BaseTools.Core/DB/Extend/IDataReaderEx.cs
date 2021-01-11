@@ -42,7 +42,6 @@ namespace ZJH.BaseTools.DB.Extend
                 callback(reader, index++);
             }
         }
-
         /// <summary>
         /// 遍历某个字段
         /// </summary>
@@ -64,5 +63,108 @@ namespace ZJH.BaseTools.DB.Extend
                 callback((T)obj, index++);
             }
         }
+
+
+        /// <summary>
+        /// 读取一行数据，并转为Dictionary对象
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static Dictionary<string, object> ToDictionary(this IDataReader reader)
+        {
+            if (reader.Read())
+            {
+                Dictionary<string, object> result = new Dictionary<string, object>();
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    string colname = reader.GetName(i);
+                    object value = reader.GetValue(i);
+                    string typename = reader.GetFieldType(i).Name;
+                    switch (typename)
+                    {
+                        case "String":
+                            value = value.ToString();
+                            break;
+                        case "Decimal":
+                            if (value is DBNull)
+                            {
+                                value = 0;
+                            }
+                            break;
+                    }
+                    result.Add(colname, value);
+                }
+                return result;
+            }
+            return null;
+        }
+        /// <summary>
+        /// 将所有记录转换为Dictionary数组
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static List<Dictionary<string, object>> ToDictionaryList(this IDataReader reader)
+        {
+            var results = new List<Dictionary<string, object>>();
+            Dictionary<string, object> dict;
+            while (null != (dict = reader.ToDictionary()))
+            {
+                results.Add(dict);
+            }
+            return results;
+        }
+        /// <summary>
+        /// 读取数据，并转为JSON字符串
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="FirstRowOnly">设为true只读取一行会返回一个对象，否则返回数组（无论有几条记录）</param>
+        /// <returns></returns>
+        public static string ToJSON(this IDataReader reader, bool FirstRowOnly = false)
+        {
+            return FirstRowOnly ?
+                reader.ToDictionary().ToJSON("{}") :
+                reader.ToDictionaryList().ToJSON("[]");
+        }
+
+
+        /// <summary>
+        ///  读取一行数据，并解析为指定类型的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static T Read<T>(this IDataReader reader) where T : IDataRow, new() {
+            if (reader.Read()) {
+                T obj = new T();
+                obj.Parse(reader);
+                return obj;
+            }
+            return default(T);
+        }
+        /// <summary>
+        /// 读取所有数据，并解析为指定类型的对象列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static List<T> ReadAll<T>(this IDataReader reader) where T : IDataRow, new()
+        {
+            List<T> lst = new List<T>();
+            T item;
+            while (null != (item = reader.Read<T>()))
+            {
+                lst.Add(item);
+            }
+            return lst;
+        }
+    }
+
+
+    /// <summary>
+    /// getListByPath所用的泛型的基类
+    /// </summary>
+    public interface IDataRow
+    {
+        void Parse(IDataReader reader);
     }
 }

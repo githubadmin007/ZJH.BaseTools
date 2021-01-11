@@ -103,6 +103,12 @@
     <Compile Include="..\ZJH.BaseTools.Core\DB\DatabaseHelper.cs">
       <Link>DB\DatabaseHelper.cs</Link>
     </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\Extend\DataColumnEx.cs">
+      <Link>DB\Extend\DataColumnEx.cs</Link>
+    </Compile>
+    <Compile Include="..\ZJH.BaseTools.Core\DB\Extend\DataRowEx.cs">
+      <Link>DB\Extend\DataRowEx.cs</Link>
+    </Compile>
     <Compile Include="..\ZJH.BaseTools.Core\DB\Extend\DataTableEx.cs">
       <Link>DB\Extend\DataTableEx.cs</Link>
     </Compile>
